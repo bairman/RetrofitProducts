@@ -37,6 +37,8 @@ class PhoneFragment : Fragment() {
                     binding.text1.text = request.brand
                     binding.text2.text  = request.description
                     println("this IS World Is Yours!!!")
+                    println("this IS World Is Yours!!!")
+                    println("this IS World Is Yours!!!")
                 }
             }
         }
