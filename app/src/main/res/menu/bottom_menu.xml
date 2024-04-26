@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@id/tokenFragment"
+            android:icon="@drawable/identity"
+            android:title=""
+            app:showAsAction="always" />
+        <item
+            android:id="@id/phoneFragment"
+            android:icon="@drawable/home"
+            android:title=""
+            app:showAsAction="always" />
+        <item
+            android:id="@id/searchFragment"
+            android:icon="@drawable/search"
+            android:title=""
+            app:showAsAction="always" />
+        <item
+            android:id="@id/productsFragment"
+            android:icon="@drawable/add"
+            android:title=""
+            app:showAsAction="always" />
+    </group>
+</menu>
