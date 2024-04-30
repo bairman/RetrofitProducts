@@ -2,6 +2,7 @@ package com.example.retrofitbair.presentetion.app
 
 import android.app.Application
 import com.example.retrofitbair.presentetion.api.ProductApi
+import com.example.retrofitbair.presentetion.repository.ApiRepository
 import com.example.retrofitbair.presentetion.vm.PhoneViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,11 +37,11 @@ class App : Application() {
         }
     }
 
-//    val vmModule = module {
-//        viewModel<PhoneViewModel>{
-//            PhoneViewModel()
-//        }
-//    }
+    val vmModule = module {
+            viewModel<PhoneViewModel>{
+                PhoneViewModel(get())
+            }
+    }
 
     val apiModule = module {
         single {
@@ -48,13 +49,19 @@ class App : Application() {
         }
     }
 
+    val apiRepository = module {
+        single {
+            ApiRepository(get())
+        }
+    }
+
+
     override fun onCreate() {
         super.onCreate()
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@App)
-            // Здесь вы добавляете модули в Koin
-            modules(listOf( networkModule, apiModule) )
+            modules(listOf( networkModule, apiModule, vmModule, apiRepository) )
         }
     }
 }

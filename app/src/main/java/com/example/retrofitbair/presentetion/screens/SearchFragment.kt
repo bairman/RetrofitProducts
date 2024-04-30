@@ -17,11 +17,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
-    val apiService: ProductApi by inject()
-    private val phoneViewModel: PhoneViewModel by activityViewModels()
+    private val phoneViewModel: PhoneViewModel by inject()
     private lateinit var adapter: SearchAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,18 +48,12 @@ class SearchFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 phoneViewModel.token.observe(viewLifecycleOwner) { token ->
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(500)
-                        val request = newText?.let {
-                            apiService.getProductsByName(
-                                token,
-                                it
-                            )
-                        }
-                        requireActivity().runOnUiThread {
-                            adapter.submitList(request?.products)
-                        }
+                    if (newText != null) {
+                        phoneViewModel.getSearchProd(token, newText)
                     }
+                }
+                phoneViewModel.productsSearch.observe(viewLifecycleOwner){
+                    adapter.submitList(it)
                 }
                 return true
             }
@@ -67,6 +61,30 @@ class SearchFragment : Fragment() {
     }
 }
 
+
+//binding.serachView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//    override fun onQueryTextSubmit(query: String?): Boolean {
+//        return true
+//    }
+//
+//    override fun onQueryTextChange(newText: String?): Boolean {
+//        phoneViewModel.token.observe(viewLifecycleOwner) { token ->
+//            CoroutineScope(Dispatchers.IO).launch {
+//                delay(500)
+//                val request = newText?.let {
+//                    apiService.getProductsByName(
+//                        token,
+//                        it
+//                    )
+//                }
+//                requireActivity().runOnUiThread {
+//                    adapter.submitList(request?.products)
+//                }
+//            }
+//        }
+//        return true
+//    }
+//})
 
 //kminchelle
 //0lelplR

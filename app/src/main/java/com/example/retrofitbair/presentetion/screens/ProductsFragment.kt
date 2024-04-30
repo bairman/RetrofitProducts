@@ -16,12 +16,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ProductsFragment : Fragment() {
-
     private lateinit var binding: FragmentProductsBinding
-    val apiService: ProductApi by inject()
-    private val phoneViewModel: PhoneViewModel by activityViewModels()
+    private val phoneViewModel: PhoneViewModel by sharedViewModel()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,13 +35,10 @@ class ProductsFragment : Fragment() {
         binding.rcView.layoutManager = LinearLayoutManager(requireContext())
         binding.rcView.adapter = adapter
         phoneViewModel.token.observe(viewLifecycleOwner) { token ->
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = apiService.getAllProducts(token)
-                requireActivity().runOnUiThread {
-                    adapter.submitList(response.products)
-                }
-            }
+            phoneViewModel.getAllProd(token)
+        }
+        phoneViewModel.products.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
-
 }
